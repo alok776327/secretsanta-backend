@@ -23,45 +23,52 @@ import java.util.Map;
         "https://secret-santa-frontend-5pyx.onrender.com"
     },
     allowedHeaders = "*",
-    methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS}
+    methods = {
+        RequestMethod.GET,
+        RequestMethod.POST,
+        RequestMethod.OPTIONS
+    }
 )
 @RequiredArgsConstructor
 public class SessionController {
 
     private final SessionService sessionService;
 
+    // 🔑 THIS IS THE MISSING PIECE
+    @RequestMapping(value = "/**", method = RequestMethod.OPTIONS)
+    public ResponseEntity<Void> handleOptions() {
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/create")
     public Map<String, String> create(@RequestBody CreateSessionRequest req) {
-        return Map.of("sessionId",
-                sessionService.createSession(req.getMembers()).getId());
+        return Map.of(
+            "sessionId",
+            sessionService.createSession(req.getMembers()).getId()
+        );
     }
 
     @PostMapping("/join/{sessionId}")
-public Map<String, String> join(
-        @PathVariable String sessionId,
-        @RequestParam String name,
-        @RequestParam String deviceId) {
+    public Map<String, String> join(
+            @PathVariable String sessionId,
+            @RequestParam String name,
+            @RequestParam String deviceId) {
 
-    String token = sessionService.joinSession(sessionId, name, deviceId);
-    return Map.of("token", token);
-}
+        String token = sessionService.joinSession(sessionId, name, deviceId);
+        return Map.of("token", token);
+    }
 
+    @GetMapping("/assignment/{sessionId}")
+    public Map<String, String> assignment(
+            @PathVariable String sessionId,
+            @RequestParam String deviceId,
+            @RequestParam String token) {
 
-   @GetMapping("/assignment/{sessionId}")
-public Map<String, String> assignment(
-        @PathVariable String sessionId,
-        @RequestParam String deviceId,
-        @RequestParam String token) {
+        return sessionService.getAssignment(sessionId, deviceId, token);
+    }
 
-    return sessionService.getAssignment(sessionId, deviceId, token);
-}
-
-
-    //session admin control
     @GetMapping("/admin/{sessionId}")
     public Map<String, Object> adminStats(@PathVariable String sessionId) {
-    return sessionService.getAdminStats(sessionId.toLowerCase());
+        return sessionService.getAdminStats(sessionId.toLowerCase());
+    }
 }
-
-}
-
