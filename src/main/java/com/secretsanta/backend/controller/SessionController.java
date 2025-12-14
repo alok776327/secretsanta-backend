@@ -21,7 +21,9 @@ import java.util.Map;
     origins = {
         "http://localhost:3000",
         "https://secret-santa-frontend-5pyx.onrender.com"
-    }
+    },
+    allowedHeaders = "*",
+    methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS}
 )
 @RequiredArgsConstructor
 public class SessionController {
