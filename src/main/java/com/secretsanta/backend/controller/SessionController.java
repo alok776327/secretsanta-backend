@@ -17,7 +17,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/session")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(
+    origins = {
+        "http://localhost:3000",
+        "https://secret-santa-frontend-5pyx.onrender.com"
+    }
+)
 @RequiredArgsConstructor
 public class SessionController {
 
