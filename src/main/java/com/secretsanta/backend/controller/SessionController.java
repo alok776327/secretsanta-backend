@@ -17,28 +17,28 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/session")
-@CrossOrigin(
-    origins = {
-        "http://localhost:3000",
-        "https://secret-santa-frontend-5pyx.onrender.com"
-    },
-    allowedHeaders = "*",
-    methods = {
-        RequestMethod.GET,
-        RequestMethod.POST,
-        RequestMethod.OPTIONS
-    }
-)
+// @CrossOrigin(
+//     origins = {
+//         "http://localhost:3000",
+//         "https://secret-santa-frontend-5pyx.onrender.com"
+//     },
+//     allowedHeaders = "*",
+//     methods = {
+//         RequestMethod.GET,
+//         RequestMethod.POST,
+//         RequestMethod.OPTIONS
+//     }
+// )
 @RequiredArgsConstructor
 public class SessionController {
 
     private final SessionService sessionService;
 
     // 🔑 THIS IS THE MISSING PIECE
-    @RequestMapping(value = "/**", method = RequestMethod.OPTIONS)
-    public ResponseEntity<Void> handleOptions() {
-        return ResponseEntity.ok().build();
-    }
+    // @RequestMapping(value = "/**", method = RequestMethod.OPTIONS)
+    // public ResponseEntity<Void> handleOptions() {
+    //     return ResponseEntity.ok().build();
+    // }
 
     @PostMapping("/create")
     public Map<String, String> create(@RequestBody CreateSessionRequest req) {
