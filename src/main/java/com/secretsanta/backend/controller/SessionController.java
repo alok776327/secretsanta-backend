@@ -30,6 +30,7 @@ import java.util.Map;
 //     }
 // )
 @RequiredArgsConstructor
+@CrossOrigin
 public class SessionController {
 
     private final SessionService sessionService;
