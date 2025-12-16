@@ -144,47 +144,77 @@ public class SessionService {
 }
 
 
-    private Map<String, String> generateAssignments(List<String> members) {
+//     private Map<String, String> generateAssignments(List<String> members) {
+
+//     Map<String, String> assigned = new HashMap<>();
+//     List<String> remaining = new ArrayList<>(members);
+
+//     // 🎯 SPECIAL PAIRS (FORCED)
+//     forcePair(assigned, remaining, "vaishali", "paras");
+//     forcePair(assigned, remaining, "aanchal", "devang");
+
+//     // 🎲 RANDOM ASSIGNMENT FOR REST
+//     Collections.shuffle(remaining);
+//     List<String> receivers = new ArrayList<>(remaining);
+//     Collections.shuffle(receivers);
+
+//     for (int i = 0; i < remaining.size(); i++) {
+//         if (remaining.get(i).equals(receivers.get(i))) {
+//             // reshuffle if self-assigned
+//             Collections.shuffle(receivers);
+//             i = -1;
+//             continue;
+//         }
+//         assigned.put(remaining.get(i), receivers.get(i));
+//     }
+
+//     return assigned;
+// }
+
+
+//     private void forcePair(
+//         Map<String, String> assigned,
+//         List<String> remaining,
+//         String a,
+//         String b
+// ) {
+//     if (remaining.contains(a) && remaining.contains(b)) {
+//         assigned.put(a, b);
+//         assigned.put(b, a);
+//         remaining.remove(a);
+//         remaining.remove(b);
+//     }
+// }
+
+private Map<String, String> generateAssignments(List<String> members) {
 
     Map<String, String> assigned = new HashMap<>();
-    List<String> remaining = new ArrayList<>(members);
+    List<String> senders = new ArrayList<>(members);
+    List<String> receivers = new ArrayList<>(members);
 
-    // 🎯 SPECIAL PAIRS (FORCED)
-    forcePair(assigned, remaining, "vaishali", "paras");
-    forcePair(assigned, remaining, "aanchal", "devang");
+    // 🎯 ONE-WAY FORCED PAIR
+    if (senders.contains("vaishali") && receivers.contains("paras")) {
+        assigned.put("vaishali", "paras");
+        senders.remove("vaishali");   // vaishali already assigned
+        receivers.remove("paras");    // paras cannot receive again
+    }
 
     // 🎲 RANDOM ASSIGNMENT FOR REST
-    Collections.shuffle(remaining);
-    List<String> receivers = new ArrayList<>(remaining);
+    Collections.shuffle(senders);
     Collections.shuffle(receivers);
 
-    for (int i = 0; i < remaining.size(); i++) {
-        if (remaining.get(i).equals(receivers.get(i))) {
-            // reshuffle if self-assigned
+    for (int i = 0; i < senders.size(); i++) {
+        if (senders.get(i).equals(receivers.get(i))) {
             Collections.shuffle(receivers);
             i = -1;
             continue;
         }
-        assigned.put(remaining.get(i), receivers.get(i));
+        assigned.put(senders.get(i), receivers.get(i));
     }
 
     return assigned;
 }
 
-
-    private void forcePair(
-        Map<String, String> assigned,
-        List<String> remaining,
-        String a,
-        String b
-) {
-    if (remaining.contains(a) && remaining.contains(b)) {
-        assigned.put(a, b);
-        assigned.put(b, a);
-        remaining.remove(a);
-        remaining.remove(b);
-    }
-}
 
 //handing admin 
     public Map<String, Object> getAdminStats(String sessionId) {
